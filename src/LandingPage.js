@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 const STATS = [
-  { num: '12,000+', label: 'עולים מצאו דירה' },
-  { num: '6', label: 'שפות נתמכות' },
-  { num: '98%', label: 'שביעות רצון' },
+  { num: '12,000+', labelHe: 'עולים מצאו דירה', labelEn: '12,000+ newcomers found homes' },
+  { num: '6', labelHe: 'שפות נתמכות', labelEn: '6 supported languages' },
+  { num: '98%', labelHe: 'שביעות רצון', labelEn: '98% satisfaction' },
 ];
 
 const TESTIMONIALS = [
-  { name: 'Katya M.', origin: 'אוקראינה', text: 'מצאתי דירה לפני שנחתתי. לא האמנתי שזה אפשרי.', avatar: 'https://i.pravatar.cc/60?img=47' },
-  { name: 'Pierre D.', origin: 'צרפת', text: 'בעל הדירה דיבר איתי צרפתית — הרגשתי בבית מהרגע הראשון.', avatar: 'https://i.pravatar.cc/60?img=12' },
-  { name: 'Yosef A.', origin: 'אתיופיה', text: 'בלי משפחה, בלי תרגום — עשיתי הכל לבד לראשונה.', avatar: 'https://i.pravatar.cc/60?img=68' },
+  { name: 'Katya M.', originHe: 'אוקראינה', originEn: 'Ukraine', textHe: 'מצאתי דירה לפני שנחתתי. לא האמנתי שזה אפשרי.', textEn: 'I found a home before I landed. I couldn’t believe it was possible.', avatar: 'https://i.pravatar.cc/60?img=47' },
+  { name: 'Pierre D.', originHe: 'צרפת', originEn: 'France', textHe: 'בעל הדירה דיבר איתי צרפתית — הרגשתי בבית מהרגע הראשון.', textEn: 'The landlord spoke French with me — I felt at home from the first moment.', avatar: 'https://i.pravatar.cc/60?img=12' },
+  { name: 'Yosef A.', originHe: 'אתיופיה', originEn: 'Ethiopia', textHe: 'בלי משפחה, בלי תרגום — עשיתי הכל לבד לראשונה.', textEn: 'Without family or translation, I did everything myself for the first time.', avatar: 'https://i.pravatar.cc/60?img=68' },
 ];
 
-export default function LandingPage({ onNavigate }) {
+export default function LandingPage({ onNavigate, t, lang }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
 
@@ -53,7 +53,9 @@ export default function LandingPage({ onNavigate }) {
             opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease',
           }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', display: 'inline-block' }} />
-            <span style={{ color: '#F0C96B', fontSize: '14px', fontWeight: '500' }}>הפלטפורמה הרשמית של משרד העלייה והקליטה</span>
+            <span style={{ color: '#F0C96B', fontSize: '14px', fontWeight: '500' }}>
+              {lang === 'he' ? 'הפלטפורמה הרשמית של משרד העלייה והקליטה' : 'The official absorption ministry platform'}
+            </span>
           </div>
 
           {/* כותרת */}
@@ -67,9 +69,9 @@ export default function LandingPage({ onNavigate }) {
             transform: visible ? 'translateY(0)' : 'translateY(30px)',
             transition: 'all 0.8s ease 0.2s',
           }}>
-            בית חם מחכה לך
+            {lang === 'he' ? 'בית חם מחכה לך' : 'A warm home is waiting for you'}
             <br />
-            <span style={{ color: '#C9A84C' }}>עוד לפני שנחתת</span>
+            <span style={{ color: '#C9A84C' }}>{lang === 'he' ? 'עוד לפני שנחתת' : 'Even before you land'}</span>
           </h1>
 
           <p style={{
@@ -80,20 +82,24 @@ export default function LandingPage({ onNavigate }) {
             opacity: visible ? 1 : 0,
             transition: 'opacity 0.8s ease 0.4s',
           }}>
-            מצא דירה בשפת האם שלך, עם בעל בית שמבין אותך,
-            <br />בתקציב שמשרד הקליטה אישר — בביטחון מלא.
+            {lang === 'he'
+              ? 'מצא דירה בשפת האם שלך, עם בעל בית שמבין אותך,'
+              : 'Find a home in your language, with a landlord who understands you,'}
+            <br />
+            {lang === 'he'
+              ? 'בתקציב שמשרד הקליטה אישר — בביטחון מלא.'
+              : 'within the budget approved by the absorption ministry — with full confidence.'}
           </p>
 
           <div style={{
             display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap',
             opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease 0.6s',
           }}>
-            <button className="btn-primary" style={{ fontSize: '17px', padding: '16px 40px' }}
-              onClick={() => onNavigate('register')}>
-              מצא דירה עכשיו ←
+            <button className="btn-primary" style={{ fontSize: '17px', padding: '16px 40px' }} onClick={() => onNavigate('register')}>
+              {lang === 'he' ? 'מצא דירה עכשיו ←' : 'Find a home now ←'}
             </button>
             <button className="btn-secondary" onClick={() => onNavigate('search')}>
-              עיין בנכסים
+              {lang === 'he' ? 'עיין בנכסים' : 'Browse listings'}
             </button>
           </div>
 
@@ -103,10 +109,10 @@ export default function LandingPage({ onNavigate }) {
             flexWrap: 'wrap',
             opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease 0.8s',
           }}>
-            {STATS.map(s => (
+            {STATS.map((s) => (
               <div key={s.num} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', color: '#C9A84C', fontWeight: '700' }}>{s.num}</div>
-                <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', marginTop: '4px' }}>{s.label}</div>
+                <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', marginTop: '4px' }}>{lang === 'he' ? s.labelHe : s.labelEn}</div>
               </div>
             ))}
           </div>
@@ -123,10 +129,10 @@ export default function LandingPage({ onNavigate }) {
       {/* המלצות */}
       <div style={{ padding: '80px 24px', maxWidth: '1000px', margin: '0 auto' }}>
         <h2 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '12px', color: '#0F1B2D' }}>
-          הם כבר מצאו את הבית שלהם
+          {lang === 'he' ? 'הם כבר מצאו את הבית שלהם' : 'They already found their home'}
         </h2>
         <p style={{ textAlign: 'center', color: '#8A9BB0', marginBottom: '48px' }}>
-          עולים שהשתמשו בפלטפורמה שלנו
+          {lang === 'he' ? 'עולים שהשתמשו בפלטפורמה שלנו' : 'Newcomers who used our platform'}
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
@@ -136,10 +142,12 @@ export default function LandingPage({ onNavigate }) {
                 <img src={t.avatar} alt={t.name} style={{ width: '48px', height: '48px', borderRadius: '50%' }} />
                 <div>
                   <div style={{ fontWeight: '600', color: '#0F1B2D' }}>{t.name}</div>
-                  <div style={{ fontSize: '13px', color: '#8A9BB0' }}>עלה מ{t.origin}</div>
+                  <div style={{ fontSize: '13px', color: '#8A9BB0' }}>{lang === 'he' ? `עלה מ${t.originHe}` : `From ${t.originEn}`}</div>
                 </div>
               </div>
-              <div style={{ color: '#2E4057', fontSize: '15px', lineHeight: 1.6, fontStyle: 'italic' }}>"{t.text}"</div>
+              <div style={{ color: '#2E4057', fontSize: '15px', lineHeight: 1.6, fontStyle: 'italic' }}>
+                {"\"" + (lang === 'he' ? t.textHe : t.textEn) + "\""}
+              </div>
               <div style={{ marginTop: '16px', display: 'flex', gap: '2px' }}>
                 {[1,2,3,4,5].map(s => <span key={s} style={{ color: '#C9A84C', fontSize: '16px' }}>★</span>)}
               </div>
@@ -154,13 +162,13 @@ export default function LandingPage({ onNavigate }) {
           borderRadius: '24px', padding: '56px 40px',
         }}>
           <h2 style={{ color: '#FFFFFF', fontSize: '28px', marginBottom: '12px' }}>
-            מוכן להתחיל?
+            {lang === 'he' ? 'מוכן להתחיל?' : 'Ready to get started?'}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '32px', fontSize: '16px' }}>
-            ההרשמה חינמית. מצא דירה בשפתך בדקות.
+            {lang === 'he' ? 'הרשמה חינמית. מצא דירה בשפתך בדקות.' : 'Sign up is free. Find a home in your language in minutes.'}
           </p>
           <button className="btn-primary" style={{ fontSize: '16px' }} onClick={() => onNavigate('register')}>
-            הירשם עכשיו — בחינם
+            {lang === 'he' ? 'הירשם עכשיו — בחינם' : 'Register now — free'}
           </button>
         </div>
       </div>

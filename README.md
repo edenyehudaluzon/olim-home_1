@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# Olim Home
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## איך להריץ את הפרויקט
 
-## Available Scripts
+1. התקן את התלויות:
+   ```bash
+   npm install
+   ```
+2. הפעל את הסרבר:
+   ```bash
+   npm start
+   ```
+3. פתח בדפדפן את:
+   ```
+   http://localhost:3000
+   ```
 
-In the project directory, you can run:
+## קבצים חשובים לעבודה
 
-### `npm start`
+- [src/App.js](src/App.js) - הנקודה המרכזית של האפליקציה
+- [src/RegisterPage.js](src/RegisterPage.js) - טופס הרשמה למשתמש
+- [src/SearchPage.js](src/SearchPage.js) - דף חיפוש דירות
+- [src/PropertyPage.js](src/PropertyPage.js) - דף פירוט נכס
+- [src/AddPropertyPage.js](src/AddPropertyPage.js) - טופס הוספת נכס חדש
+- [src/data.js](src/data.js) - מאגר הדירות, שפות וערים
+- [vercel.json](vercel.json) - קונפיגורציה של Vercel ל-React SPA
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## מה נוסף עכשיו
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- תמיכה בסיסית ב-**בחירת סוג משתמש** בהרשמה: דייר או בעל דירה
+- דף ופורם ל**הוספת נכס חדש** עבור בעלי דירה
+- שמירת נכסים בתצוגה מקומית עם localStorage
+- מתג שפה ב-navbar לעברית / אנגלית
 
-### `npm test`
+## מה צריך לעדכן עוד
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- תמיכה ב-**סוג משתמש**: דייר או בעל דירה
+- דף / טופס של **הוספת נכס חדש** עבור בעלי דירה
+- שמירת נכסים חדשה ב-state מיוחד או ב-backend אמיתי
+- **שינוי שפה** בין עברית ואנגלית
 
-### `npm run build`
+## איך זה עובד כרגע
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+המערכת כרגע תומכת ב:
+- חיפוש דירות מתוך ה-data הנוכחי
+- הצגת פרטי נכס
+- הרשמת משתמש עם שפות ודף חיפוש
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+המערכת כרגע לא תומכת ב:
+- יצירת דירה חדשה על ידי בעל דירה
+- שמירה של נכסים לאחר רענון הדף
+- ממשק רב-שפה בפועל
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## מה עוד אני צריך כדי שזה יעבוד מלא
 
-### `npm run eject`
+1. להחליט אם מוכנים להשתמש ב-Backend / API או להריץ הכל בסטייט מקומי.
+2. להוסיף שדות `role` או `userType` בהרשמה (`tenant` / `landlord`).
+3. להגדיר מסך ניהול לדייר ובעל דירה.
+4. להוסיף מילון תרגום ו-state של שפה.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+אם תרצה, אני יכול להוסיף עכשיו את השדות האלה ולהכין את הטופס של הוספת דירה חדשה.
