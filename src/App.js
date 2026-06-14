@@ -57,6 +57,10 @@ export default function App() {
     return saved ? JSON.parse(saved) : defaultProperties;
   });
   const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'he');
+  const [tenants, setTenants] = useState(() => {
+    const saved = localStorage.getItem('tenants');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -72,6 +76,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem('tenants', JSON.stringify(tenants));
+  }, [tenants]);
 
   useEffect(() => {
     localStorage.setItem('lang', lang);
@@ -92,6 +100,10 @@ export default function App() {
   const handleAddProperty = (property) => {
     setProperties((prev) => [property, ...prev]);
     setPage('search');
+  };
+
+  const handleAddTenant = (tenant) => {
+    setTenants((prev) => [tenant, ...prev]);
   };
 
   const navigate = (p) => setPage(p);
@@ -148,6 +160,7 @@ export default function App() {
           properties={properties}
           t={t}
           lang={lang}
+          onAddTenant={handleAddTenant}
         />
       )}
       {page === 'addProperty' && <AddPropertyPage onAddProperty={handleAddProperty} user={user} t={t} lang={lang} />}

@@ -3,7 +3,10 @@ import { LANGUAGES, CITIES } from './data';
 
 const LANG_FLAGS = { 'עברית':'🇮🇱','English':'🇬🇧','רוסית':'🇷🇺','אוקראינית':'🇺🇦','ספרדית':'🇪🇸','צרפתית':'🇫🇷','אמהרית':'🇪🇹','ערבית':'🇸🇦' };
 
-export default function SearchPage({ onNavigate, onSelectProperty, user, properties, t, lang }) {
+export default function SearchPage({ onNavigate, onSelectProperty, user, properties, t, lang, onAddTenant }) {
+  const [showAddTenant, setShowAddTenant] = useState(false);
+  const [tenantForm, setTenantForm] = useState({ fullName: '', phone: '', email: '', languages: [] });
+  const [tenantSaved, setTenantSaved] = useState(false);
   const [filters, setFilters] = useState({ city: '', minPrice: '', maxPrice: '', rooms: '', language: '', date: '' });
   const [saved, setSaved] = useState([]);
   const [searched, setSearched] = useState(false);
@@ -24,13 +27,60 @@ export default function SearchPage({ onNavigate, onSelectProperty, user, propert
 
   const label = (he, en) => (lang === 'he' ? he : en);
 
+  const toggleTenantLanguage = (langValue) => {
+    setTenantForm((f) => ({
+      ...f,
+      languages: f.languages.includes(langValue) ? f.languages.filter((l) => l !== langValue) : [...f.languages, langValue],
+    }));
+  };
+
+  const handleAddTenantSubmit = () => {
+    if (!tenantForm.fullName.trim()) return;
+    const newTenant = {
+      id: Date.now(),
+      fullName: tenantForm.fullName,
+      phone: tenantForm.phone || '',
+      email: tenantForm.email || '',
+      languages: tenantForm.languages,
+      createdAt: new Date().toISOString(),
+    };
+    // Prefer direct prop callback if provided via props
+    if (typeof onAddTenant === 'function') {
+      onAddTenant(newTenant);
+    } else if (typeof window !== 'undefined') {
+      // fallback: emit a custom event so App can listen
+      window.dispatchEvent(new CustomEvent('olim:addTenant', { detail: newTenant }));
+    }
+    setTenantSaved(true);
+    setTimeout(() => {
+      setTenantSaved(false);
+      setShowAddTenant(false);
+      setTenantForm({ fullName: '', phone: '', email: '', languages: [] });
+    }, 1400);
+  };
+
+
   return (
     <div style={{ minHeight: '100vh', background: '#FAF7F2' }}>
       <div style={{ background: 'linear-gradient(135deg, #0F1B2D, #1A2E45)', padding: '48px 24px 64px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h1 style={{ color: '#fff', fontSize: '32px', marginBottom: '8px', fontFamily: 'Playfair Display, serif' }}>
-            {user ? (lang === 'he' ? `שלום ${user.fullName?.split(' ')[0]} 👋` : `Hi ${user.fullName?.split(' ')[0]} 👋`) : label('חיפוש דירות', 'Search listings')}
-          </h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h1 style={{ color: '#fff', fontSize: '32px', marginBottom: '8px', fontFamily: 'Playfair Display, serif' }}>
+              {user ? (lang === 'he' ? `שלום ${user.fullName?.split(' ')[0]} 👋` : `Hi ${user.fullName?.split(' ')[0]} 👋`) : label('חיפוש דירות', 'Search listings')}
+            </h1>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              {user?.role === 'landlord' && (
+                <button className="btn-primary" style={{ padding: '10px 16px', fontSize: '14px' }} onClick={() => onNavigate('addProperty')}>
+                  {label('➕ הוסף דירה', '➕ Add property')}
+                </button>
+              )}
+              {user?.role === 'landlord' && (
+                <button style={{ padding: '10px 16px', fontSize: '14px', borderRadius: '10px', border: '1px solid #E8EDF4', background: '#fff' }} onClick={() => setShowAddTenant(true)}>
+                  {label('➕ הוסף דייר', '➕ Add tenant')}
+                </button>
+              )}
+            </div>
+          </div>
           <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '32px', fontSize: '16px' }}>
             {user?.languages?.length > 0
               ? (lang === 'he'
@@ -165,6 +215,28 @@ export default function SearchPage({ onNavigate, onSelectProperty, user, propert
             </div>
           </>
         )}
+          {showAddTenant && (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,27,45,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '24px' }} onClick={() => setShowAddTenant(false)}>
+              <div className="card" style={{ width: '100%', maxWidth: '520px', padding: '28px' }} onClick={(e) => e.stopPropagation()}>
+                <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>{label('הוספת דייר חדש', 'Add new tenant')}</h3>
+                <div style={{ display: 'grid', gap: '10px' }}>
+                  <input className="input-field" placeholder={label('שם מלא', 'Full name')} value={tenantForm.fullName} onChange={(e) => setTenantForm((f) => ({ ...f, fullName: e.target.value }))} />
+                  <input className="input-field" placeholder={label('טלפון', 'Phone')} value={tenantForm.phone} onChange={(e) => setTenantForm((f) => ({ ...f, phone: e.target.value }))} />
+                  <input className="input-field" placeholder={label('אימייל', 'Email')} value={tenantForm.email} onChange={(e) => setTenantForm((f) => ({ ...f, email: e.target.value }))} />
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {LANGUAGES.map((language) => (
+                      <button key={language} type="button" onClick={() => toggleTenantLanguage(language)} style={{ padding: '8px 12px', borderRadius: '999px', border: '1px solid', borderColor: tenantForm.languages.includes(language) ? '#1D5F8A' : '#E8EDF4', background: tenantForm.languages.includes(language) ? 'rgba(29,95,138,0.08)' : '#fff' }}>{language}</button>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button className="btn-primary" style={{ flex: 1 }} onClick={handleAddTenantSubmit}>{label('שמור דייר', 'Save tenant')}</button>
+                    <button style={{ flex: 1, borderRadius: '10px', border: '1px solid #E8EDF4', background: '#fff' }} onClick={() => setShowAddTenant(false)}>{label('ביטול', 'Cancel')}</button>
+                  </div>
+                  {tenantSaved && <div style={{ textAlign: 'center', color: '#27AE60', fontWeight: 600 }}>{label('הדייר נוסף בהצלחה!', 'Tenant added!')}</div>}
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );
