@@ -2,18 +2,29 @@
 
 ## איך להריץ את הפרויקט
 
-1. התקן את התלויות:
+1. עבור לתיקיית הפרויקט:
+   ```bash
+   cd olim-housing
+   ```
+2. עדכן את הענף מה־remote (אם אתה עובד על `main`):
+   ```bash
+   git checkout main
+   git pull origin main
+   ```
+   אם אתה עובד על ענף נפרד, החלף את `main` בשם הענף.
+3. התקן את התלויות:
    ```bash
    npm install
    ```
-2. הפעל את הסרבר:
+4. הפעל את השרת:
    ```bash
    npm start
    ```
-3. פתח בדפדפן את:
+5. פתח בדפדפן את:
    ```
    http://localhost:3000
    ```
+   אם פורט 3000 כבר תפוס, CRA ישאל אם להפעיל על פורט אחר (למשל 3001 או 3002).
 
 ## קבצים חשובים לעבודה
 
@@ -39,7 +50,21 @@
 - שמירת נכסים חדשה ב-state מיוחד או ב-backend אמיתי
 - **שינוי שפה** בין עברית ואנגלית
 
-## איך זה עובד כרגע
+## ענף העבודה הנוכחי
+
+הקוד הנוכחי עובד בענף `ui-improvements` ב־GitHub. זה אומר שהשינויים כבר קיימים ב־remote בכתובת:
+
+- https://github.com/edenyehudaluzon/olim-home_1/tree/ui-improvements
+
+### איך לפתוח Pull Request
+
+1. היכנס ל־GitHub ופתח את הריפו: `https://github.com/edenyehudaluzon/olim-home_1`.
+2. בחר את הסניף `ui-improvements` ב־branch switcher של GitHub.
+3. לחצו על `Compare & pull request` או `Create pull request`.
+4. בחרו את בסיס ה־PR כ־`main` ואת הסניף להשוואה כ־`ui-improvements`.
+5. כתוב כותרת ותיאור, ואז לחצו על `Create pull request`.
+
+## איך להריץ את הפרויקט
 
 המערכת כרגע תומכת ב:
 - חיפוש דירות מתוך ה-data הנוכחי
