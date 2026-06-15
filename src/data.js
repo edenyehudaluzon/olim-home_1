@@ -1,8 +1,56 @@
 export const LANGUAGES = ['עברית','אנגלית','רוסית','אוקראינית','ספרדית','צרפתית','אמהרית','ערבית'];
 
+export const LANGUAGE_MAP = {
+  'עברית': 'Hebrew',
+  'אנגלית': 'English',
+  'רוסית': 'Russian',
+  'אוקראינית': 'Ukrainian',
+  'ספרדית': 'Spanish',
+  'צרפתית': 'French',
+  'אמהרית': 'Amharic',
+  'ערבית': 'Arabic',
+};
+
 export const CITIES = ['תל אביב','ירושלים','חיפה','באר שבע','נתניה','ראשון לציון','פתח תקווה','אשדוד','רמת גן','הרצליה'];
 
+export const CITY_MAP = {
+  'תל אביב': 'Tel Aviv',
+  'ירושלים': 'Jerusalem',
+  'חיפה': 'Haifa',
+  'באר שבע': 'Beer Sheva',
+  'נתניה': 'Netanya',
+  'ראשון לציון': 'Rishon LeZion',
+  'פתח תקווה': 'Petah Tikva',
+  'אשדוד': 'Ashdod',
+  'רמת גן': 'Ramat Gan',
+  'הרצליה': 'Herzliya',
+};
+
 export const COUNTRIES = ['אוקראינה','רוסיה','צרפת','ארגנטינה','ארה"ב','קנדה','אתיופיה','גרמניה','בריטניה','ברזיל'];
+
+export const COUNTRY_MAP = {
+  'אוקראינה': 'Ukraine',
+  'רוסיה': 'Russia',
+  'צרפת': 'France',
+  'ארגנטינה': 'Argentina',
+  'ארה"ב': 'USA',
+  'קנדה': 'Canada',
+  'אתיופיה': 'Ethiopia',
+  'גרמניה': 'Germany',
+  'בריטניה': 'UK',
+  'ברזיל': 'Brazil',
+};
+
+export const LANG_FLAGS = {
+  'עברית': '🇮🇱',
+  'אנגלית': '🇬🇧',
+  'רוסית': '🇷🇺',
+  'אוקראינית': '🇺🇦',
+  'ספרדית': '🇪🇸',
+  'צרפתית': '🇫🇷',
+  'אמהרית': '🇪🇹',
+  'ערבית': '🇸🇦',
+};
 
 export const properties = [
   {
@@ -20,6 +68,7 @@ export const properties = [
     landlordPhoto: 'https://i.pravatar.cc/80?img=11',
     verified: true,
     furnished: true,
+    available: true,
     image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80',
     images: [
       'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80',
@@ -30,6 +79,7 @@ export const properties = [
     phone: '050-1234567',
     email: 'alex@example.com',
     amenities: ['מרפסת','חניה','מעלית','ממ"ד','מיזוג'],
+    tabu: null,
   },
   {
     id: 2,
@@ -46,6 +96,7 @@ export const properties = [
     landlordPhoto: 'https://i.pravatar.cc/80?img=5',
     verified: true,
     furnished: true,
+    available: true,
     image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
     images: [
       'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
@@ -55,6 +106,7 @@ export const properties = [
     phone: '052-9876543',
     email: 'michel@example.com',
     amenities: ['נוף לים','אינטרנט','מיזוג','ריהוט מלא'],
+    tabu: null,
   },
   {
     id: 3,
@@ -71,6 +123,7 @@ export const properties = [
     landlordPhoto: 'https://i.pravatar.cc/80?img=15',
     verified: true,
     furnished: false,
+    available: true,
     image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&q=80',
     images: [
       'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80',
@@ -80,6 +133,7 @@ export const properties = [
     phone: '054-3456789',
     email: 'david@example.com',
     amenities: ['גינה','חצר','חניה','מחסן'],
+    tabu: null,
   },
   {
     id: 4,
@@ -96,6 +150,7 @@ export const properties = [
     landlordPhoto: 'https://i.pravatar.cc/80?img=20',
     verified: false,
     furnished: true,
+    available: true,
     image: 'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=600&q=80',
     images: [
       'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=800&q=80',
@@ -104,6 +159,7 @@ export const properties = [
     phone: '058-1122334',
     email: 'olga@example.com',
     amenities: ['מרפסת','מיזוג','קרוב לים'],
+    tabu: null,
   },
   {
     id: 5,
@@ -120,6 +176,7 @@ export const properties = [
     landlordPhoto: 'https://i.pravatar.cc/80?img=33',
     verified: true,
     furnished: false,
+    available: true,
     image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80',
     images: [
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
@@ -128,6 +185,7 @@ export const properties = [
     phone: '050-9988776',
     email: 'jonathan@example.com',
     amenities: ['גג פרטי','בריכה','חניה כפולה','מעלית VIP'],
+    tabu: null,
   },
   {
     id: 6,
@@ -144,6 +202,7 @@ export const properties = [
     landlordPhoto: 'https://i.pravatar.cc/80?img=60',
     verified: true,
     furnished: true,
+    available: true,
     image: 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=600&q=80',
     images: [
       'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800&q=80',
@@ -152,5 +211,6 @@ export const properties = [
     phone: '054-6677889',
     email: 'shlomo@example.com',
     amenities: ['קרוב לאוניברסיטה','מיזוג','ריהוט מלא'],
+    tabu: null,
   },
 ];
