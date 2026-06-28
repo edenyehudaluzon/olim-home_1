@@ -97,6 +97,10 @@ export default function App() {
     const c = localStorage.getItem('contractsCount');
     return c ? parseInt(c, 10) : 847;
   });
+  const [contractStatuses, setContractStatuses] = useState(() => {
+    const s = localStorage.getItem('contractStatuses');
+    return s ? JSON.parse(s) : {};
+  });
   const [notifications, setNotifications] = useState([]);
   const prevPropertiesRef = useRef(null);
 
@@ -108,6 +112,7 @@ export default function App() {
   useEffect(() => { localStorage.setItem('lang', lang); }, [lang]);
   useEffect(() => { localStorage.setItem('savedIds', JSON.stringify(savedIds)); }, [savedIds]);
   useEffect(() => { localStorage.setItem('contractsCount', String(contractsCount)); }, [contractsCount]);
+  useEffect(() => { localStorage.setItem('contractStatuses', JSON.stringify(contractStatuses)); }, [contractStatuses]);
 
   // Notify user if a saved property becomes available again
   useEffect(() => {
@@ -160,6 +165,10 @@ export default function App() {
 
   const handleToggleAvailability = (propertyId, available) => {
     setProperties(prev => prev.map(p => p.id === propertyId ? { ...p, available } : p));
+  };
+
+  const handleUpdateContractStatus = (propertyId, step) => {
+    setContractStatuses(prev => ({ ...prev, [propertyId]: step }));
   };
 
   const dismissNotification = (id) => setNotifications(n => n.filter(x => x.id !== id));
@@ -297,6 +306,8 @@ export default function App() {
           properties={properties}
           onToggleSaved={handleToggleSaved}
           onSelectProperty={(id) => { setSelectedPropertyId(id); navigate('property'); }}
+          contractStatuses={contractStatuses}
+          onUpdateContractStatus={handleUpdateContractStatus}
         />
       )}
     </div>

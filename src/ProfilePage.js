@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { LANGUAGES, COUNTRIES, COUNTRY_MAP, CITY_MAP, LANGUAGE_MAP, LANG_FLAGS } from './data';
 
-export default function ProfilePage({ user, setUser, onNavigate, t, lang, savedIds, properties, onToggleSaved, onSelectProperty }) {
+const CONTRACT_STEPS_HE = ['פנייה ראשונית', 'ביקור בנכס', 'במשא ומתן', 'חוזה נחתם'];
+const CONTRACT_STEPS_EN = ['Contacted', 'Property visited', 'Negotiating', 'Contract signed'];
+const CONTRACT_ICONS = ['📞', '🏠', '🤝', '📝'];
+
+export default function ProfilePage({ user, setUser, onNavigate, t, lang, savedIds, properties, onToggleSaved, onSelectProperty, contractStatuses = {}, onUpdateContractStatus }) {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ ...user });
   const [saved, setSaved] = useState(false);
@@ -178,47 +182,94 @@ export default function ProfilePage({ user, setUser, onNavigate, t, lang, savedI
               <button className="btn-primary" onClick={() => onNavigate('search')}>{label('חפש דירות', 'Browse listings')}</button>
             </div>
           ) : (
-            <div style={{ display: 'grid', gap: '16px' }}>
-              {savedProperties.map(p => (
-                <div
-                  key={p.id}
-                  className="card"
-                  style={{ display: 'flex', overflow: 'hidden', cursor: 'pointer', opacity: p.available === false ? 0.75 : 1 }}
-                  onClick={() => onSelectProperty(p.id)}
-                >
-                  <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <img src={p.image} alt={p.title} style={{ width: '180px', height: '140px', objectFit: 'cover' }} />
-                    {p.available === false && (
-                      <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,27,45,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ background: '#E74C3C', color: '#fff', padding: '4px 10px', borderRadius: '50px', fontSize: '11px', fontWeight: '700' }}>{label('לא זמין', 'Unavailable')}</span>
+            <div style={{ display: 'grid', gap: '20px' }}>
+              {savedProperties.map(p => {
+                const steps = lang === 'he' ? CONTRACT_STEPS_HE : CONTRACT_STEPS_EN;
+                const currentStep = contractStatuses[p.id] ?? -1;
+                return (
+                  <div key={p.id} className="card" style={{ overflow: 'hidden', opacity: p.available === false ? 0.8 : 1 }}>
+                    {/* Property row */}
+                    <div
+                      style={{ display: 'flex', cursor: 'pointer' }}
+                      onClick={() => onSelectProperty(p.id)}
+                    >
+                      <div style={{ position: 'relative', flexShrink: 0 }}>
+                        <img src={p.image} alt={p.title} style={{ width: '180px', height: '140px', objectFit: 'cover' }} />
+                        {p.available === false && (
+                          <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,27,45,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ background: '#E74C3C', color: '#fff', padding: '4px 10px', borderRadius: '50px', fontSize: '11px', fontWeight: '700' }}>{label('לא זמין', 'Unavailable')}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div style={{ flex: 1, padding: '16px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ flex: 1, padding: '16px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <div>
-                          <h3 style={{ fontSize: '16px', color: '#0F1B2D', marginBottom: '2px' }}>{p.title}</h3>
-                          <p style={{ color: '#8A9BB0', fontSize: '13px' }}>📍 {p.neighborhood}, {translateCity(p.city)}</p>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div>
+                              <h3 style={{ fontSize: '16px', color: '#0F1B2D', marginBottom: '2px' }}>{p.title}</h3>
+                              <p style={{ color: '#8A9BB0', fontSize: '13px' }}>📍 {p.neighborhood}, {translateCity(p.city)}</p>
+                            </div>
+                            <button
+                              onClick={e => { e.stopPropagation(); onToggleSaved?.(p.id); }}
+                              style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#E74C3C', lineHeight: 1, flexShrink: 0 }}
+                              title={label('הסר ממועדפים', 'Remove from favorites')}
+                            >♥</button>
+                          </div>
+                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
+                            {p.languages.map(l => <span key={l} className="badge badge-blue" style={{ fontSize: '11px' }}>{LANG_FLAGS[l] || ''} {translateLang(l)}</span>)}
+                            {p.available !== false && <span className="badge badge-green" style={{ fontSize: '11px' }}>● {label('זמין', 'Available')}</span>}
+                          </div>
                         </div>
-                        <button
-                          onClick={e => { e.stopPropagation(); onToggleSaved?.(p.id); }}
-                          style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#E74C3C', lineHeight: 1, flexShrink: 0 }}
-                          title={label('הסר ממועדפים', 'Remove from favorites')}
-                        >♥</button>
-                      </div>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
-                        {p.languages.map(l => <span key={l} className="badge badge-blue" style={{ fontSize: '11px' }}>{LANG_FLAGS[l] || ''} {translateLang(l)}</span>)}
-                        {p.available !== false && <span className="badge badge-green" style={{ fontSize: '11px' }}>● {label('זמין', 'Available')}</span>}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+                          <span style={{ color: '#8A9BB0', fontSize: '13px' }}>🛏 {p.rooms} · 📐 {p.size} {label('מ"ר', 'sq.m')}</span>
+                          <span style={{ fontFamily: "'Frank Ruhl Libre', serif", fontSize: '18px', fontWeight: '700', color: '#0F1B2D' }}>₪{p.price.toLocaleString()}</span>
+                        </div>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-                      <span style={{ color: '#8A9BB0', fontSize: '13px' }}>🛏 {p.rooms} · 📐 {p.size} {label('מ"ר', 'sq.m')}</span>
-                      <span style={{ fontFamily: "'Frank Ruhl Libre', serif", fontSize: '18px', fontWeight: '700', color: '#0F1B2D' }}>₪{p.price.toLocaleString()}</span>
+
+                    {/* Contract progress tracker */}
+                    <div style={{ borderTop: '1px solid #E8EDF4', padding: '16px 20px', background: '#FAFBFC' }}>
+                      <div style={{ fontSize: '12px', color: '#8A9BB0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
+                        {label('סטטוס התקדמות', 'Progress status')}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
+                        {steps.map((step, i) => {
+                          const done = i <= currentStep;
+                          const active = i === currentStep;
+                          return (
+                            <React.Fragment key={i}>
+                              <button
+                                onClick={() => onUpdateContractStatus?.(p.id, i === currentStep ? i - 1 : i)}
+                                title={step}
+                                style={{
+                                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+                                  background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px', minWidth: '60px',
+                                }}
+                              >
+                                <div style={{
+                                  width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                  fontSize: '16px',
+                                  background: done ? (active ? '#1D5F8A' : 'rgba(29,95,138,0.15)') : '#F0F4F8',
+                                  border: `2px solid ${done ? '#1D5F8A' : '#E8EDF4'}`,
+                                  transition: 'all 0.2s',
+                                  boxShadow: active ? '0 0 0 3px rgba(29,95,138,0.2)' : 'none',
+                                }}>
+                                  {done && !active ? '✓' : CONTRACT_ICONS[i]}
+                                </div>
+                                <span style={{ fontSize: '10px', color: done ? '#1D5F8A' : '#8A9BB0', fontWeight: done ? '600' : '400', textAlign: 'center', lineHeight: 1.3, maxWidth: '60px' }}>
+                                  {step}
+                                </span>
+                              </button>
+                              {i < steps.length - 1 && (
+                                <div style={{ flex: 1, height: '2px', background: i < currentStep ? '#1D5F8A' : '#E8EDF4', transition: 'background 0.3s', marginBottom: '20px' }} />
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
