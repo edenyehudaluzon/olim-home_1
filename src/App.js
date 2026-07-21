@@ -129,6 +129,7 @@ export default function App() {
       });
     }
     prevPropertiesRef.current = properties;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
   const t = (key) => translations[lang][key] || key;

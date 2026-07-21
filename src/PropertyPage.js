@@ -24,6 +24,7 @@ export default function PropertyPage({ property, onNavigate, user, t, lang, save
 
   useEffect(() => {
     if (property) setChatMessages(getChats(property.id));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [property?.id]);
 
   if (!property) {
